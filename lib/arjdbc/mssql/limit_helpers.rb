@@ -71,7 +71,6 @@ module ::ArJdbc
             end_row = offset + limit.to_i
             find_select = /\b(SELECT(?:\s+DISTINCT)?)\b(.*)/im
             whole, select, rest_of_query = find_select.match(sql).to_a
-            puts "sql=#{sql}"
             rest_of_query.strip!
             if rest_of_query[0...1] == "1" && rest_of_query !~ /1 AS/i
               rest_of_query[0] = "*"
