@@ -71,6 +71,7 @@ module ::ArJdbc
             end_row = offset + limit.to_i
             find_select = /\b(SELECT(?:\s+DISTINCT)?)\b(.*)/im
             whole, select, rest_of_query = find_select.match(sql).to_a
+            puts "sql=#{sql}"
             rest_of_query.strip!
             if rest_of_query[0...1] == "1" && rest_of_query !~ /1 AS/i
               rest_of_query[0] = "*"
@@ -79,8 +80,15 @@ module ::ArJdbc
               from_table = LimitHelpers.get_table_name(rest_of_query)
               rest_of_query = from_table + '.' + rest_of_query
             end
-            new_sql = "#{select} t.* FROM (SELECT ROW_NUMBER() OVER(#{order}) AS _row_num, #{rest_of_query}"
-            new_sql << ") AS t WHERE t._row_num BETWEEN #{start_row.to_s} AND #{end_row.to_s}"
+            # We might want to add the condition that rest_of_query has at least one JOIN outside of signle quotes
+            if select =~ /DISTINCT/
+              order.gsub!(/([a-z0-9_])+\./, 't.')
+              new_sql = "SELECT t.* FROM (SELECT ROW_NUMBER() OVER(#{order}) AS _row_num, t.* FROM (#{select} #{rest_of_query}"
+              new_sql << ") AS t) AS t WHERE t._row_num BETWEEN #{start_row.to_s} AND #{end_row.to_s}"
+            else
+              new_sql = "#{select} t.* FROM (SELECT ROW_NUMBER() OVER(#{order}) AS _row_num, #{rest_of_query}"
+              new_sql << ") AS t WHERE t._row_num BETWEEN #{start_row.to_s} AND #{end_row.to_s}"
+            end
             sql.replace(new_sql)
           end
           sql
