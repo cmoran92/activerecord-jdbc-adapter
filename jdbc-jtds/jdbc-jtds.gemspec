@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--main", "README.txt"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{jruby-extras}
+  s.summary = %q{jTDS JDBC driver for Java and jTDS/ActiveRecord-JDBC.}
 end
