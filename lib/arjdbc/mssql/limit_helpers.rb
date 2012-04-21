@@ -81,9 +81,14 @@ module ::ArJdbc
             end
             # We might want to add the condition that rest_of_query has at least one JOIN outside of signle quotes
             if select =~ /DISTINCT/
-              order.gsub!(/([a-z0-9_])+\./, 't.')
-              new_sql = "SELECT t.* FROM (SELECT ROW_NUMBER() OVER(#{order}) AS _row_num, t.* FROM (#{select} #{rest_of_query}"
-              new_sql << ") AS t) AS t WHERE t._row_num BETWEEN #{start_row.to_s} AND #{end_row.to_s}"
+              t_cols = rest_of_query.sub(/ FROM .*/, '').gsub(/\[?[A-Za-z0-9_]+\]?\./, 't.')
+              new_sql = "SELECT #{t_cols} FROM (
+                             SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS _row_num, #{t_cols} FROM (
+                                 SELECT DISTINCT #{t_cols} FROM (
+                                     SELECT ROW_NUMBER() OVER(#{order}) AS _row_num, #{rest_of_query}
+                                 ) AS t
+                             ) AS t
+                         ) AS t WHERE t._row_num BETWEEN #{start_row.to_s} AND #{end_row.to_s}"
             else
               new_sql = "#{select} t.* FROM (SELECT ROW_NUMBER() OVER(#{order}) AS _row_num, #{rest_of_query}"
               new_sql << ") AS t WHERE t._row_num BETWEEN #{start_row.to_s} AND #{end_row.to_s}"
