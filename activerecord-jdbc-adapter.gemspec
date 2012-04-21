@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require 'arjdbc/version'
 version = ArJdbc::Version::VERSION
 Gem::Specification.new do |s|
-  s.name        = "activerecord-jdbc-adapter"
+  s.name        = "cmoran92-activerecord-jdbc-adapter"
   s.version     = version
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nick Sieger, Ola Bini and JRuby contributors"]
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary = %q{JDBC adapter for ActiveRecord, for use within JRuby on Rails.}
   s.description = %q{activerecord-jdbc-adapter is a database adapter for Rails\' ActiveRecord
 component that can be used with JRuby[http://www.jruby.org/]. It allows use of
-virtually any JDBC-compliant database with your JRuby on Rails application.}
+virtually any JDBC-compliant database with your JRuby on Rails application. Includes patch by cmoran92 to eliminate duplicates when SELECTing DISTINCT with JOINS on MS SQL Server. }
   s.files         = `git ls-files`.split("\n").reject {|v| v =~ /^(activerecord-jdbc[^-]|jdbc-)/}
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{|f| File.basename(f) }

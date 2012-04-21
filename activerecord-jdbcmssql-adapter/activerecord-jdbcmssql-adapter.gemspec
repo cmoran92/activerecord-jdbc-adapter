@@ -4,7 +4,7 @@ $:.push arjdbc_lib unless $:.include?(arjdbc_lib)
 require 'arjdbc/version'
 version = ArJdbc::Version::VERSION
 Gem::Specification.new do |s|
-  s.name        = "activerecord-jdbcmssql-adapter"
+  s.name        = "cmoran92-activerecord-jdbcmssql-adapter"
   s.version     = version
   s.platform    = Gem::Platform::RUBY
   s.authors = ["Nick Sieger, Ola Bini and JRuby contributors"]
@@ -21,6 +21,6 @@ Gem::Specification.new do |s|
   s.rubyforge_project = %q{jruby-extras}
   s.summary = %q{MS_SQL JDBC adapter for JRuby on Rails.}
 
-  s.add_dependency 'activerecord-jdbc-adapter', "~>#{version}"
+  s.add_dependency 'cmoran92-activerecord-jdbc-adapter', "~>#{version}"
   s.add_dependency 'jdbc-jtds', '~> 1.2.0'
 end
