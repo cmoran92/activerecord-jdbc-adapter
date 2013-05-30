@@ -103,7 +103,7 @@ module ::ArJdbc
         def add_limit_offset!(sql, options)
           if options[:limit]
             order = "ORDER BY #{options[:order] || determine_order_clause(sql)}"
-            sql.sub!(/ ORDER BY.*$/i, '')
+            sql.sub!(/(.*) ORDER BY.*?$/im, '\\1')
             SqlServerReplaceLimitOffset.replace_limit_offset!(sql, options[:limit], options[:offset], order)
           end
         end
